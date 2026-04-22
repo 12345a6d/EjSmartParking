@@ -68,8 +68,16 @@ public class GestorZona {
 	}
 	
 	public Hueco reservarHueco(LocalDateTime tI, LocalDateTime tF) {
+		if(gestorHuecos.existeHueco(tI,tF) == true) {//Comprobamos que existe el hueco asociado a la solicitud existe
 	
-	return null;
+			gestorHuecos.reservarHueco(tI, tF);		 // Reservamos el hueco.
+			
+			huecosReservados.add(huecosReservados.size(), gestorHuecos.reservarHueco(tI, tF)); //Añadimos a la lista de huecos reservados el hueco reservado.
+		}
+	return 	gestorHuecos.reservarHueco(tI, tF); //Devolvemos el hueco que ha sido reservado.
+	}
+	public boolean existeHueco(LocalDateTime tI, LocalDateTime tF) {
+	return gestorHuecos.existeHueco(tI, tF);
 	}
 	
 	public boolean existeHueco(LocalDateTime tI, LocalDateTime tF) {
@@ -77,9 +85,16 @@ public class GestorZona {
 	}
 	
 	
-	public void meterEnListaEspera(SolicitudReservaAnticipada solicitud) {
-	listaEspera.add(listaEspera.size(), solicitud);
-	
+		public void meterEnListaEspera(SolicitudReservaAnticipada solicitud) {
+	for (int i = 0; i<listaEspera.size(); i++) { 			// Recorremos el arrayList listaEspera para ver dónde se introduce la solicitud.
+		if (listaEspera.get(i).getPrioridad().compareTo(solicitud.getPrioridad())>0){		//compareTo>0 implica que va después en prioridad.
+			listaEspera.add(i, solicitud);													// Se añade en la posición 4 que sería debajo del elemento listaEspera.get(4) cuando i es 3
+		}
+		else if (listaEspera.get(i).getPrioridad().compareTo(solicitud.getPrioridad())==0) { // Si son iguales, entonces vemos las fechas finales
+			if (listaEspera.get(i).getTFinal().compareTo(solicitud.getTInicial())>0) {   // compareTo>0 implica que va después en tiempo (se puede usar .isAfter o es .isBefore de la clase local.java.time)
+			listaEspera.add(i, solicitud);}  											// Añadimos la solicitud en la posición en la que la solicitud sea de una fecha anterior.
+		}
+	}
 	}
 	
 	public boolean existeHuecoReservado(Hueco hueco) {
