@@ -91,7 +91,7 @@ public class GestorZona {
 			listaEspera.add(i, solicitud);													// Se añade en la posición 4 que sería debajo del elemento listaEspera.get(4) cuando i es 3
 		}
 		else if (listaEspera.get(i).getPrioridad().compareTo(solicitud.getPrioridad())==0) { // Si son iguales, entonces vemos las fechas finales
-			if (listaEspera.get(i).getTFinal().compareTo(solicitud.getTInicial())>0) {   // compareTo>0 implica que va después en tiempo (se puede usar .isAfter o es .isBefore de la clase local.java.time)
+			if (listaEspera.get(i).getTInicial().compareTo(solicitud.getTInicial())>0) {   // compareTo>0 implica que va después en tiempo (se puede usar .isAfter o es .isBefore de la clase local.java.time)
 			listaEspera.add(i, solicitud);}  											// Añadimos la solicitud en la posición en la que la solicitud sea de una fecha anterior.
 		}
 	}
