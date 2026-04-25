@@ -40,9 +40,16 @@ public class ControladorReservas {
 
 
 	//PRE: la solicitud es válida
-	public int hacerReserva(SolicitudReserva solicitud) throws SolicitudReservaInvalida {
-		//TO-DO
-		return -1;
+	public int hacerReserva(SolicitudReserva solicitud) throws SolicitudReservaInvalida{
+		if(gestorLocalidad.existeHuecoReservado(solicitud.getHueco(), solicitud.getIZona(), solicitud.getJZona()) == false) { // Comprobamos que no existe hueco reservado asociado a la solicitud
+		
+		try {
+		registroReservas.registrarReserva(solicitud);  // Intentamos realizar la reserva
+		} catch (SolicitudReservaInvalida e) {
+		throw new SolicitudReservaInvalida ("No se ha podido realizar la reserva, compruebe que los datos de la solicitud sean correctos."); // Lanzamos excepción, comentando que no se ha realizado la reserva correctamente
+		}
+		}
+		return registroReservas.registrarReserva(solicitud);
 	}
 
 	public Reserva getReserva(int numReserva) {
