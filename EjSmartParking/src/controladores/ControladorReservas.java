@@ -54,7 +54,7 @@ public class ControladorReservas {
 
 	public Reserva getReserva(int numReserva) {
 		//TO-DO
-		return null;
+		return registroReserva.obtenerReserva(numReserva);
 	}
 
 	//PRE: la plaza dada está libre y la reserva está validada
