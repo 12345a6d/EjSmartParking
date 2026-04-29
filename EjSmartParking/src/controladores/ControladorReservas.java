@@ -10,6 +10,8 @@ import modelo.reservas.Reserva;
 import modelo.reservas.Reservas;
 import modelo.reservas.solicitudesreservas.SolicitudReserva;
 import modelo.vehiculos.Vehiculo;
+import modelo.gestoresplazas.huecos.Hueco;
+import modelo.gestoresplazas.huecos.Plaza;
 
 
 public class ControladorReservas {
@@ -35,12 +37,13 @@ public class ControladorReservas {
 	//TO-DO alumno obligatorio
 
 	public ControladorReservas(int[][] plazas, double[][] precios) {
-		//TO-DO
+	registroReservas = new Reservas ();
+	gestorLocalidad = new GestorLocalidad(plazas,precios);
 	}
 
 
 	//PRE: la solicitud es válida
-	public int hacerReserva(SolicitudReserva solicitud) throws SolicitudReservaInvalida{
+	public int hacerReserva(SolicitudReserva solicitud) throws SolicitudReservaInvalida {
 		if(gestorLocalidad.existeHuecoReservado(solicitud.getHueco(), solicitud.getIZona(), solicitud.getJZona()) == false) { // Comprobamos que no existe hueco reservado asociado a la solicitud
 		
 		try {
@@ -53,14 +56,22 @@ public class ControladorReservas {
 	}
 
 	public Reserva getReserva(int numReserva) {
-		//TO-DO
-		return registroReserva.obtenerReserva(numReserva);
+		return registroReservas.obtenerReserva(numReserva);
 	}
 
 	//PRE: la plaza dada está libre y la reserva está validada
 	public void ocuparPlaza(int i, int j, int numPlaza, int numReserva, Vehiculo vehiculo) throws PlazaOcupada, ReservaInvalida {
-		//TO-DO
+	if (!esValidaReserva(i,j,numPlaza,numReserva,vehiculo.getMatricula())) { // Validar que la reserva sí corresponde con la plaza, zona y matrícula.
+	throw new ReservaInvalida ("La reserva no es válida, vuelva a intentarlo de nuevo");
 	}
+	Reserva reserva = registroReservas.obtenerReserva(numReserva);    //Obtenemos la reserva y comprobamos que la plaza ya está ocupada
+	Plaza plaza = reserva.getHueco().getPlaza();
+	if (plaza.getVehiculo() != null) { // Comprobamos que en dicha plaza a reservar no hay ningún vehículo.
+	throw new PlazaOcupada ("La plaza ya está ocupada");
+	}
+	plaza.setVehiculo(vehiculo);
+	}
+	
 
 
 	//TO-DO alumno opcional
@@ -80,3 +91,4 @@ public class ControladorReservas {
 		return null;
 	}
 }
+
