@@ -118,7 +118,23 @@ public class GestorZona {
 	//TO-DO alumno opcionales
 	
 	public void liberarHueco(Hueco hueco) {
-		//TO-DO
+		boolean encontrado = false;
+		int i = 0;
+		while (!encontrado) {
+
+			if (huecosReservados.get(i).gettI().isEqual(hueco.gettI())
+					&& huecosReservados.get(i).gettF().isEqual(hueco.gettF()) && 
+					huecosReservados.get(i).getPlaza().getNumero() == hueco.getPlaza().getNumero() ) {
+			encontrado = true;
+			huecosReservados.removeElementAt(i);
+			gestorHuecos.liberarHueco(hueco);
+			}
+			else {
+			i++;	
+			}
+			
+		}
+		
 	}
 
 	//PRE (no es necesario comprobar): las solicitudes de la lista de espera son válidas
