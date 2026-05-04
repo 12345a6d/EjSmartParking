@@ -138,9 +138,24 @@ public class GestorZona {
 	}
 
 	//PRE (no es necesario comprobar): las solicitudes de la lista de espera son válidas
-	public IList<SolicitudReservaAnticipada> getSolicitudesAtendidasListaEspera() {
-		//TO-DO
-		return null;
+	public ArrayList<SolicitudReservaAnticipada> getSolicitudesAtendidasListaEspera() {
+	    ArrayList<SolicitudReservaAnticipada> atendidas = new ArrayList<>();
+	    // Recorremos desde el principio hasta el final
+	    int i = 0;
+	    while (i < listaEspera.size()) {
+	        SolicitudReservaAnticipada solicitud = listaEspera.get(i);
+	        // Intentamos reservar el hueco
+	        Hueco hueco = reservarHueco(solicitud.getTInicial(), solicitud.getTFinal());
+	        if (hueco != null) {
+	            solicitud.setHueco(hueco);
+	            atendidas.add(0,solicitud);   // se añade en orden de aparición
+	            listaEspera.removeElementAt(i); // eliminamos esta solicitud
+	            // No incrementamos i porque el siguiente elemento ahora está en i
+	        } else {
+	            i++; // solo avanzamos si no se pudo atender
+	        }
+	    }
+	    return atendidas;
 	}
 
 	
